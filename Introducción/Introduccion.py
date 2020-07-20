@@ -1,6 +1,11 @@
-from big_ol_pile_of_manim_imports import *
+# Para versiones anteriores de manim
+#from big_ol_pile_of_manim_imports import * 
+
+# Para versiones mas recientes de manim
+from manimlib.imports import *
 
 #### Todo lo necesario para la parte de los 3 cuerpos en este script ####
+
 #m_1 = float(input('Dame la masa 1, te recomeindo uses 1/10000 \n'))
 #m_2 = float(input('Dame la masa 2, te recomeindo uses 2 \n'))
 #m_3 = float(input('Dame la masa 3, te recomeindo uses 11/100 \n'))
@@ -118,13 +123,13 @@ def curlfunc(point):
 #    return alto*RIGHT+otracosa*UP
 
 
-#### Comienza la parte con la que se crea el video ####
+#### Parte de curvas ('orbitas) ####
 
 class intro(Scene):
     def construct(self):
         
         ##### El problema de los 3 cuerpos ###
-
+        planetintro = TextMobject("Consideremos tres planetas en \\'{o}rbita").to_edge(UP)
         estrella = Dot()
         planeta = Dot()
         satelite = Dot()
@@ -136,7 +141,7 @@ class intro(Scene):
         satelite.set_color(BLUE)\
                 .move_to((X_3[0],Y_3[0],Z_3[0]))
 
-        self.play( Write(estrella), Write(planeta), Write(satelite))
+        self.play( Write(estrella), Write(planeta), Write(satelite), Write(planetintro))
 
         E = []
         P = []
@@ -173,13 +178,13 @@ class intro(Scene):
             planeta = planeta_sig
             satelite = satelite_sig
 
-        self.wait(3)
+        self.wait(1.5)
 
         intr = TextMobject(
             "Vale la pena pensar"
             )
         intr2 = TextMobject(
-            "en las siguientes preguntas"
+            "en las siguientes preguntas:"
             )
         intr2.next_to(intr, DOWN, buff = 0.5)
         intro = VGroup(intr, intr2)
@@ -225,16 +230,17 @@ class intro(Scene):
         preg3 = VGroup(preg3_1,preg3_2)
         preg3.move_to((0,2.5,0))
 
+        self.play(FadeOut(planetintro))
         self.play(Write(intro))
-        self.wait()
+        self.wait(2)
         self.play(ReplacementTransform(intro,preg1))
-        self.wait()
+        self.wait(2)
 
         self.play(ReplacementTransform(preg1,preg4))
-        self.wait()
+        self.wait(2)
 
         self.play(ReplacementTransform(preg4,preg2))
-        self.wait()
+        self.wait(2)
 
         self.play(ReplacementTransform(preg2,preg3))
         self.wait(2)
@@ -248,7 +254,7 @@ class intro(Scene):
             self.remove(k)
         
         #### Se crea un ejemplo para introducir las flechas a utilizar más adelante ####
-
+        ### Parte de "transici'on"###
         conex = TextMobject("Imaginemos ahora una \\'{o}rbita circular")
         conex.to_edge(UP)
         planeta.move_to(np.array([2,0,0]))
@@ -277,19 +283,20 @@ class intro(Scene):
 
             t=t+dt
         preg_vel1 = TextMobject("Si queremos ahora ver la velocidad del planeta,")
-        preg_vel2 = TextMobject("c\\'{o}mo har\\'{i}as para verla en este mismo esquema?")
+        preg_vel2 = TextMobject(" c\\'{o}mo har\\'{i}as para verla en este mismo esquema?")
         preg_vel2.next_to(preg_vel1,DOWN)
         preg_vel = VGroup(preg_vel1,preg_vel2)
         preg_vel.to_edge(UP)
+        expl1 = TextMobject("Pensemos en la velocidad como una flecha.")
+        expl1.to_edge(UP)
+        expl2 = TextMobject("As\\'{i}, a cada punto en el plano le corresponde una flecha.")
+        expl2.to_edge(UP)
 
         self.play(ReplacementTransform(conex,preg_vel))
         self.wait(2)
-
-        expl1 = TextMobject("Usaremos algo nuevo, flechas")
-        expl1.to_edge(UP)
-
         self.play(ReplacementTransform(preg_vel,expl1))
-
+        self.wait()
+        self.play(ReplacementTransform(expl1,expl2))
         self.remove(planeta)
         for i in P2:
             self.remove(i)
@@ -323,47 +330,42 @@ class intro(Scene):
         for i in P2:
             self.remove(i)
         self.wait()
-        self.play(FadeOut(expl1))
+        self.play(FadeOut(expl2))
 
         #### Parte de campos vectoriales ####
 
-        title = TextMobject("Campos vectoriales:")
-        defi = TexMobject(
-            "F: \mathbb{R}^n \\rightarrow \mathbb{R}^m"
+        title = TextMobject("Esto nos hace pensar en funciones")
+        title2 = TextMobject("de el plano en el plano")
+        title2.next_to(title,DOWN)
+        VGroup(title, title2).scale(1.5)
+        transform_title = TextMobject("Estas funciones suelen verse as\\'{i}:").scale(1.5)
+        efe = TexMobject("F(x,y)=(f_x(x,y),f_y(x,y))").scale(1.3)
+        curl = TexMobject("F(x,y)=(-y,x)").scale(1.3)
+        efe.scale(1.5)     
+        # Se crea el campo vectorial con la función CurlFunc
+        vector_field_curl = VectorField(curlfunc, x_min=-5,x_max=5,y_min=-3,y_max=2.6)       
+        ltkvolt = TexMobject(
+            "F(x,y)=(\\alpha x-\\beta xy, \\gamma xy - \\delta y), \ \\alpha,\\beta,\\gamma,\\delta \\in \mathbb{R}^+ "
         )
-        defi.next_to(title,DOWN)
-        VGroup(title, defi).scale(1.5)
+        ltkvolt.scale(1)
+        ltkvolt.shift(3.5*UP)
+        # Se crea el campo vectorial con el campo tipo Lotka-Volterra
+        vector_field_LV = VectorField(lotkavolt, x_min=-5,x_max=5,y_min=-3.5,y_max=2.5)
 
+        
         self.play(
             Write(title),
-            FadeInFrom(defi, UP),
+            Write(title2)
         )
         self.wait()
-        transform_title = TextMobject("Veamos algunos ejemplos").scale(1.5)
-        dosdim = TexMobject(
-            "F: \mathbb{R}^2 \\rightarrow \mathbb{R}^2"
-        )
-        dosdim.shift(DOWN).scale(1.5)
         self.play(
             Transform(title, transform_title),
-            ReplacementTransform(defi,dosdim)
+            FadeOutAndShiftDown(title2)
             )
         self.wait()
         self.play(
-            FadeOut(title),
-            FadeOutAndShiftDown(dosdim)
-        )
-        efe = TexMobject(
-            "F(x,y)=(f_x(x,y),f_y(x,y))"
-        )
-        curl = TexMobject(
-            "F(x,y)=(-y,x)"
-        )
-        efe.scale(1.5)
-        curl.scale(1.3)
-
-        # Se crea el campo vectorial con la función CurlFunc
-        vector_field_curl = VectorField(curlfunc, x_min=-5,x_max=5,y_min=-3,y_max=2.9)
+            FadeOut(title)
+            )
         self.play(
             Write(efe)
         )
@@ -372,25 +374,16 @@ class intro(Scene):
         )
         self.wait()
         self.play(
-                curl.shift, UP*3.62,
+                curl.shift, UP*3.58,
                 run_time=1,
                 path_arc=0
         )
-        # Dibujamos el campo vectorial de forma gradual
-
+        # Dibujamos el campo vectorial "curl" de forma gradual
         self.play(*[GrowArrow(vec) for vec in vector_field_curl])
         self.wait()
-        
-        # Se crea el campo vectorial con el campo tipo Lotka-Volterra
-        ltkvolt = TexMobject(
-            "F(x,y)=(\\alpha x-\\beta xy, \\gamma xy - \\delta y), \ \\alpha,\\beta,\\gamma,\\delta \\in \mathbb{R}^+ "
-        )
-        ltkvolt.scale(1)
-        ltkvolt.shift(3.5*UP)
-        vector_field_LV = VectorField(lotkavolt, x_min=-5,x_max=5,y_min=-3.5,y_max=2.5)
         self.play(
             ReplacementTransform(curl,ltkvolt),
-            ReplacementTransform(vector_field_curl,vector_field_LV)
+            ReplacementTransform(vector_field_curl,vector_field_LV) # Cambiamos por el campo LV
             )
         self.wait(1.5)
 
@@ -400,31 +393,30 @@ class intro(Scene):
             ) 
         self.wait()
 
-        # Revisa el código anterior para dibujar tu propio campo vectorial
-        # Según el campo vectorial que se definió en la introducción
+        # RETO: Revisa el código anterior para dibujar tu propio campo vectorial
+        # según el campo vectorial que se definió en la introducción
         
-        #Sección de Preguntas
-        retos = TextMobject("Preguntas y retos").scale(1.5)
+        ### Sección de Preguntas campos vectoriales###
+        retos = TextMobject("Pensemos ahora en las siguientes preguntas:").scale(1.3)
         preg1_1 = TextMobject(
-            "Trata de imaginar campos vectoriales"
+            "Cual es el dominio y contradominio"
             )
-        preg1_2 = TexMobject(
-            r"\text{en } \mathbb{R}^3 \text{ y en } \mathbb{R}^4"
+        preg1_2 = TextMobject(
+            "de las funciones que acabamos de ver?"
             )
-        preg1_2.next_to(preg1_1,DOWN)
+        preg1_1.next_to(preg1_2,UP)
         preg1 = VGroup(preg1_1,preg1_2)
 
         preg2_1 = TextMobject(
-            "Qu\\'{e} tipo de funciones ser\\'{i}an?"
+            "Trata de imaginar funciones con dominio/contradominio"
             )
-        preg2_2 = TextMobject(
-            "(Hablando de dominio y contradominio)"
+        preg2_2 = TexMobject(
+            r"\text{en } \mathbb{R}^3 \text{ y en } \mathbb{R}^4"
             )
-        preg2_1.next_to(preg2_2,UP)
+        preg2_2.next_to(preg2_1,DOWN)
         preg2 = VGroup(preg2_1,preg2_2)
-
         extra = TextMobject(
-            "Reto: Intenta dibujar los siguientes campos"
+            "Intenta dibujar las siguientes funciones:"
             )
         extra.move_to(np.array([0,2,0]))
         campo1 = TexMobject(
