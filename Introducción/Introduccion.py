@@ -191,7 +191,7 @@ class intro(Scene):
         intro.move_to((0,2.5,0))
 
         preg1_1 = TextMobject(
-            "El movimiento de uno de los cuerpos puede verse con"
+            "¿El movimiento de uno de los cuerpos puede verse con"
             )
         preg1_2 = TexMobject(
             r"\text{funciones de } \mathbb{R} \text{ a } \mathbb{R}?"
@@ -204,14 +204,14 @@ class intro(Scene):
             "Y para ver el movimiento de los tres con una sola funci\\'{o}n,"
             )
         preg4_2 = TextMobject(
-            "qu\\'{e} dominio y codominio tendr\\'{i}a?"
+            "¿qu\\'{e} dominio y codominio tendr\\'{i}a?"
 	    )
         preg4_2.next_to(preg4_1, DOWN, buff = 0.5)
         preg4 = VGroup(preg4_1,preg4_2)
         preg4.move_to((0,2.5,0))
 
         preg2_1 = TextMobject(
-		"Como har\\'{i}as para dar las"
+		"¿Como har\\'{i}as para dar las"
 		)
         preg2_2 = TextMobject(
 		"trayectorias de los planetas?"
@@ -283,7 +283,7 @@ class intro(Scene):
 
             t=t+dt
         preg_vel1 = TextMobject("Si queremos ahora ver la velocidad del planeta,")
-        preg_vel2 = TextMobject(" c\\'{o}mo har\\'{i}as para verla en este mismo esquema?")
+        preg_vel2 = TextMobject("¿c\\'{o}mo har\\'{i}as para verla en este mismo esquema?")
         preg_vel2.next_to(preg_vel1,DOWN)
         preg_vel = VGroup(preg_vel1,preg_vel2)
         preg_vel.to_edge(UP)
@@ -399,7 +399,7 @@ class intro(Scene):
         ### Sección de Preguntas campos vectoriales###
         retos = TextMobject("Pensemos ahora en las siguientes preguntas:").scale(1.3)
         preg1_1 = TextMobject(
-            "Cual es el dominio y contradominio"
+            "¿Cual es el dominio y contradominio"
             )
         preg1_2 = TextMobject(
             "de las funciones que acabamos de ver?"
@@ -411,7 +411,7 @@ class intro(Scene):
             "Trata de imaginar funciones con dominio/contradominio"
             )
         preg2_2 = TexMobject(
-            r"\text{en } \mathbb{R}^3 \text{ y en } \mathbb{R}^4"
+            r"\text{en } \mathbb{R}^3 \text{ y en } \mathbb{R}^4."
             )
         preg2_2.next_to(preg2_1,DOWN)
         preg2 = VGroup(preg2_1,preg2_2)
@@ -455,4 +455,4 @@ class intro(Scene):
         self.play(Write(campo3))
         self.wait()
         self.play(Write(masretos))
-        self.wait()
+        self.wait() 
