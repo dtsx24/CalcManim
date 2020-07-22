@@ -456,3 +456,31 @@ class intro(Scene):
         self.wait()
         self.play(Write(masretos))
         self.wait() 
+        self.remove(extra,campo1,campo2,campo3,masretos)
+
+        #### Autores y créditos ####
+
+        autor1 = TextMobject("Bruno Ram\\'{i}rez")
+        autor1.scale(0.8)
+        contact1 = TextMobject("GitHub: @brunormzg")
+        contact1.scale(0.6)
+        contact1.next_to(autor1,DOWN)
+        aut1 = VGroup(autor1,contact1)
+
+        autor2 = TextMobject("Donaldo Mora")
+        autor2.scale(0.8)
+        autor2.next_to(contact1,DOWN)
+        contact2 = TextMobject("Instagram: donal\\_mora")
+        contact2.scale(0.6)
+        contact2.next_to(autor2,DOWN)
+        aut2 = VGroup(autor2,contact2)
+
+        autor3 = TextMobject("Rodrigo Moreno")
+        autor3.scale(0.8)
+        autor3.next_to(contact2,DOWN)
+        contact3 = TextMobject("Instagram: \\_nosoyro")
+        contact3.scale(0.6)
+        contact3.next_to(autor3,DOWN)
+        aut3 = VGroup(autor3,contact3)
+
+        self.play(Write(aut1),Write(aut2),Write(aut3))
