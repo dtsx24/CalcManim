@@ -178,8 +178,6 @@ class intro(Scene):
             planeta = planeta_sig
             satelite = satelite_sig
 
-        self.wait(1.5)
-
         intr = TextMobject(
             "Vale la pena pensar"
             )
@@ -200,6 +198,28 @@ class intro(Scene):
         preg1 = VGroup(preg1_1,preg1_2)
         preg1.move_to((0,2.5,0))
 
+        preg5_1 = TextMobject("¿Qu\\'{e} tipo de función podemos utilizar para describir la")
+        preg5_2 = TextMobject("posici\\'{o}n de un planeta en cada momento?")
+        preg5_2.next_to(preg5_1,DOWN)
+        preg5 = VGroup(preg5_1,preg5_2)
+        preg5.move_to((0,2.5,0))
+
+        preg6 = TextMobject("¿Cu\\'{a}l es el dominio y qu\\'{e} representa su variable?")
+        preg6.move_to((0,2.5,0))
+
+        preg7 = TextMobject("¿Cu\\'{a}l es su contradominio y qu\\'{e} representan sus elementos?")
+        preg7.move_to((0,2.5,0))
+
+        preg2_1 = TextMobject(
+		"¿C\\'{o}mo se relaciona esa funci\\'{o}n con"
+		)
+        preg2_2 = TextMobject(
+		"la trayectoria del planeta?"
+		)
+        preg2_1.next_to(preg2_2, UP, buff = 0.5)
+        preg2 = VGroup(preg2_1,preg2_2)
+        preg2.move_to((0,2.5,0))
+
         preg4_1 = TextMobject(
             "Y para ver el movimiento de los tres con una sola funci\\'{o}n,"
             )
@@ -210,21 +230,11 @@ class intro(Scene):
         preg4 = VGroup(preg4_1,preg4_2)
         preg4.move_to((0,2.5,0))
 
-        preg2_1 = TextMobject(
-		"¿Como har\\'{i}as para dar las"
-		)
-        preg2_2 = TextMobject(
-		"trayectorias de los planetas?"
-		)
-        preg2_1.next_to(preg2_2, UP, buff = 0.5)
-        preg2 = VGroup(preg2_1,preg2_2)
-        preg2.move_to((0,2.5,0))
-
         preg3_1 = TextMobject(
 		"Imagina la gr\\'{a}fica de una"
 		)
         preg3_2 = TexMobject(
-		r"\text{funci\'{o}n } f:\mathbb{R} \to \mathbb{R}^2"
+		r"\text{funci\'{o}n } f:\mathbb{R} \to \mathbb{R}^2."
 		)
         preg3_2.next_to(preg3_1,DOWN)
         preg3 = VGroup(preg3_1,preg3_2)
@@ -234,15 +244,24 @@ class intro(Scene):
         self.play(Write(intro))
         self.wait(2)
         self.play(ReplacementTransform(intro,preg1))
+        self.wait(3)
+
+        self.play(ReplacementTransform(preg1,preg5))
+        self.wait(3)
+        
+        self.play(ReplacementTransform(preg5,preg6))
         self.wait(2)
 
-        self.play(ReplacementTransform(preg1,preg4))
+        self.play(ReplacementTransform(preg6,preg7))
         self.wait(2)
 
-        self.play(ReplacementTransform(preg4,preg2))
+        self.play(ReplacementTransform(preg7,preg2))
         self.wait(2)
 
-        self.play(ReplacementTransform(preg2,preg3))
+        self.play(ReplacementTransform(preg2,preg4))
+        self.wait(3)
+
+        self.play(ReplacementTransform(preg4,preg3))
         self.wait(2)
         self.play(FadeOut(preg3))
         self.remove(estrella,planeta,satelite,estrella_sig_aux,planeta_sig_aux,satelite_sig_aux)
@@ -255,7 +274,7 @@ class intro(Scene):
         
         #### Se crea un ejemplo para introducir las flechas a utilizar más adelante ####
         ### Parte de "transici'on"###
-        conex = TextMobject("Imaginemos ahora una \\'{o}rbita circular")
+        conex = TextMobject("Imaginemos ahora una \\'{o}rbita circular:")
         conex.to_edge(UP)
         planeta.move_to(np.array([2,0,0]))
         self.play(Write(conex))
@@ -282,14 +301,14 @@ class intro(Scene):
             planeta = planeta_sig
 
             t=t+dt
-        preg_vel1 = TextMobject("Si queremos ahora ver la velocidad del planeta,")
-        preg_vel2 = TextMobject("¿c\\'{o}mo har\\'{i}as para verla en este mismo esquema?")
+        preg_vel1 = TextMobject("¿Qu\\'{e} tipo de funci\\'{o}n necesitamos para conocer")
+        preg_vel2 = TextMobject("la velocidad del planeta en cada posici\\'{o}n?")
         preg_vel2.next_to(preg_vel1,DOWN)
         preg_vel = VGroup(preg_vel1,preg_vel2)
         preg_vel.to_edge(UP)
         expl1 = TextMobject("Pensemos en la velocidad como una flecha.")
         expl1.to_edge(UP)
-        expl2 = TextMobject("As\\'{i}, a cada punto en el plano le corresponde una flecha.")
+        expl2 = TextMobject("As\\'{i}, a cada punto de la \\'{o}rbita le corresponde una flecha.")
         expl2.to_edge(UP)
 
         self.play(ReplacementTransform(conex,preg_vel))
@@ -334,10 +353,9 @@ class intro(Scene):
 
         #### Parte de campos vectoriales ####
 
-        title = TextMobject("Esto nos hace pensar en funciones")
-        title2 = TextMobject("de el plano en el plano")
+        title = TextMobject("Como cada flecha se puede representar con un par ordenado,")
+        title2 = TextMobject("esto nos hace pensar en funciones del plano en el plano.")
         title2.next_to(title,DOWN)
-        VGroup(title, title2).scale(1.5)
         transform_title = TextMobject("Estas funciones suelen verse as\\'{i}:").scale(1.5)
         efe = TexMobject("F(x,y)=(f_x(x,y),f_y(x,y))").scale(1.3)
         curl = TexMobject("F(x,y)=(-y,x)").scale(1.3)
@@ -357,7 +375,7 @@ class intro(Scene):
             Write(title),
             Write(title2)
         )
-        self.wait()
+        self.wait(2)
         self.play(
             Transform(title, transform_title),
             FadeOutAndShiftDown(title2)
