@@ -874,10 +874,10 @@ class Normas(Scene):
         intro2.next_to(intro1,DOWN)
         intro = VGroup(intro1,intro2)
         titlep = TexMobject(r"\text{Norma } p")
-        normp = TexMobject(r"\Vert x \Vert_p = \left(\sum_{i=1}^n \vert x_i^p \vert \right)^{1/p}")
+        normp = TexMobject(r"\Vert x \Vert_p = \left(\sum_{i=1}^n \vert x_i \vert ^p \right)^{1/p}")
         normp.next_to(titlep,DOWN)
         Groupp = VGroup(titlep,normp)
-        text = TextMobject("Veamos que pasa cuando $p$ crece en $\\mathbb{N}$")
+        text = TextMobject("Veamos que pasa cuando $p$ crece en $\\mathbb{R}$")
 
         self.play(Write(intro))
         self.wait(2)
@@ -890,54 +890,69 @@ class Normas(Scene):
         self.play(FadeIn(Group3),ShowCreation(fig3))
         self.play(ApplyMethod(Group3.to_edge,DOWN))
 
-        for n in range(1,11):
+        n = 1
+
+        while n<10:
             valor_sig = TexMobject(r"p="+str(n))
             valor_sig.to_edge(UP)
-            self.play(Write(valor_sig))
+            self.add(valor_sig)
             D = []
             j=0
-            dj=0.05
+            dj=1/16
             while j<1:
                 dot1 = Dot(radius=0.05,color=PINK)
+                dot1_2 = Dot(radius=0.05,color=PINK)
                 dot1.move_to(np.array([j,(1-j**n)**(1/n),0]))
-                self.add(dot1)
+                dot1_2.move_to(np.array([(1-j**n)**(1/n),j,0]))
+                self.add(dot1,dot1_2)
                 self.wait(0.05)
                 D.append(dot1)
+                D.append(dot1_2)
                 j=j+dj
             j=1
             while j>0:
                 dot2 = Dot(radius=0.05,color=PINK)
+                dot2_2 = Dot(radius=0.05,color=PINK)
                 dot2.move_to(np.array([j,-(1-j**n)**(1/n),0]))
-                self.add(dot2)
+                dot2_2.move_to(np.array([-(1-j**n)**(1/n),j,0]))
+                self.add(dot2,dot2_2)
                 self.wait(0.05)
                 D.append(dot2)
+                D.append(dot2_2)
                 j=j-dj
             j=0
             while j>-1:
                 dot3 = Dot(radius=0.05,color=PINK)
+                dot3_2 = Dot(radius=0.05,color=PINK)
                 dot3.move_to(np.array([j,-(1-(-j)**n)**(1/n),0]))
-                self.add(dot3)
+                dot3_2.move_to(np.array([-(1-(-j)**n)**(1/n),j,0]))
+                self.add(dot3,dot3_2)
                 self.wait(0.05)
                 D.append(dot3)
+                D.append(dot3_2)
                 j=j-dj
             j=-1
             while j<0:
                 dot4 = Dot(radius=0.05,color=PINK)
+                dot4_2 = Dot(radius=0.05,color=PINK)
                 dot4.move_to(np.array([j,(1-(-j)**n)**(1/n),0]))
-                self.add(dot4)
+                dot4_2.move_to(np.array([(1-(-j)**n)**(1/n),j,0]))
+                self.add(dot4,dot4_2)
                 self.wait(0.05)
                 D.append(dot4)
+                D.append(dot4_2)
                 j=j+dj
             self.wait(0.5)
             for i in D:
                 self.remove(i)
             self.remove(valor_sig)
+            n=n+0.20
         self.remove(plano,Group3,fig3)
 
         conclus1 = TextMobject("Vemos que tiende al ``c\\'{i}rculo'' que resulta de usar")
         conclus2 = TextMobject("la norma infinito, de ah\\'{i} su nombre.").next_to(conclus1,DOWN)
         conclus = VGroup(conclus1,conclus2)
-        ejer = TextMobject("Puedes cambiar el códgo para verlo con más valores de $p$")
+        ejer = TextMobject("Puedes cambiar el código para verlo con más valores de $p$")
 
         self.play(Write(ejer))
         self.wait(2)
