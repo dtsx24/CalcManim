@@ -1,5 +1,9 @@
 from manimlib.imports import *
 
+
+#### SUGERENCIA: SIEMPRE QUE CAMBIESLOS VECTORES A VISUALIZAR ###
+### CONDISERA QUE EL PLNO ES DE [-7,7]x[-4,4] ####
+
 #### Propiedades de la definición de un espacio vectorial ####
 
 class Grid(VGroup):
@@ -81,7 +85,7 @@ class ScreenGrid(VGroup):
 
         self.add(grid, axes, labels)
 
-class conmutatividad(Scene):
+class Conmutatividad(Scene):
     def construct(self):
         grid = ScreenGrid()
 
@@ -171,7 +175,7 @@ class conmutatividad(Scene):
         self.play(Write(Text_f))
         self.wait()
         
-class asociatividad(Scene):
+class Asociatividad(Scene):
     def construct(self):
         grid = ScreenGrid()
         ###vectores:
@@ -262,7 +266,7 @@ class asociatividad(Scene):
         self.wait()
         self.play(Write(t_11))
         
-class inverso_aditivo(Scene):
+class Inverso_Aditivo(Scene):
     def construct(self):
         ###vectores
         grid = ScreenGrid()
@@ -314,7 +318,7 @@ class inverso_aditivo(Scene):
         self.play(Write(t_2), Write(gpo_menos_x), FadeOut(t_1))
         self.wait()
     
-class distribucion_suma_escalares(Scene):
+class Distribucion_Suma_Escalares(Scene):
        def construct(self):
            ###vectores:
            grid = ScreenGrid()
@@ -405,7 +409,7 @@ c=-1.5
 
 text_pos=np.array([-4,2.6,0])
 
-class opera(Scene):
+class Opera(Scene):
     def construct(self):
         plano = NumberPlane()
 
@@ -503,7 +507,7 @@ class opera(Scene):
 
 #### Bases de espacios vectoriales y combinaciones lineales ####
 
-class bases(Scene):
+class Bases(Scene):
     def construct(self):
         grid = ScreenGrid()
         
@@ -582,12 +586,245 @@ class bases(Scene):
         self.play(ReplacementTransform(VGroup(v_1_mov_v_1, grid, v_1), t_13))
 
 #### Norma y propiedades ####
+### Modifica estos vectores visualizar la primera propiedad, NO se dibujan partiendo del origen
+v1 = np.array([2,1,0])
+v2 = np.array([4,2,0])
+v3 = np.array([-1,2,0])
+v4 = np.array([3,0,0])
+
+####
+
+# Puedes cambiar estos vectores por otros  para visualizar la
+# Desigualdad del tri'angulo y la propiedad de multiplicacion por escalar
+
+avec = np.array([1,1,0])
+bvec = np.array([4,-2,0])
+lamb = 1.5
+
+## (NO MODIFICAR)
+anorm = np.linalg.norm(avec)
+bnorm = np.linalg.norm(bvec)
+sumnorm = np.linalg.norm(avec+bvec)
+nv1 = round(np.linalg.norm(v1),3)
+nv2 = round(np.linalg.norm(v2),3)
+nv3 = round(np.linalg.norm(v3),3)
+nv4 = round(np.linalg.norm(v4),3)
+
+
+class Propiedades_Norma(Scene):
+    def construct(self):
+        ### Titulo y definici'on ###
+
+        titulo = TextMobject("La norma y sus propiedades").scale(1.2)
+        deftex = TexMobject(r"\text{Se defini\'{o} la norma euclidiana de un vector}\ \vec{x} \in \mathbb{R}^n\ \text{como}:").shift(2*UP)
+        defn  = TexMobject(r"\Vert \vec{x} \Vert:= \sqrt{x_1^2+x_2^2+x_3^2+...+x_n^2}")
+        longi = TextMobject("Esta cantidad representa la \"longitud\" de un vector").shift(2*DOWN)
+        def2d = TexMobject(r"\text{Consideremos el caso}\ \vec{x} \in \mathbb{R}^2").shift(2*UP)
+        d2d = TexMobject(r"\Vert \vec{x} \Vert := \sqrt{x_1^2+x_2^2}")
+        vamo = TextMobject("Adelante veremos tres propiedades fundamentales").shift(2*DOWN)
+        segslide = VGroup(def2d,d2d,vamo)
+
+        self.play(Write(titulo))
+        self.wait()
+        self.play(FadeOut(titulo))
+        self.play(Write(deftex),Write(defn),Write(longi))
+        self.wait(2)
+        self.play(ReplacementTransform(deftex,def2d), ReplacementTransform(defn,d2d), ReplacementTransform(longi,vamo))
+        self.wait(2)
+        self.play(FadeOut(segslide))
+        self.wait()
+
+        ### PRIMERA PROPIEDAD ###
+
+        prop1 = TexMobject(r"\Vert \vec{x} \Vert \geq 0\  \forall \vec{x} \in \mathbb{R}^2\ \text{y}\ \Vert \vec{x} \Vert = 0 \Leftrightarrow \vec{x}=\vec{0}").to_edge(DOWN)
+        plano = NumberPlane()
+        vc1 = Vector(direction = v1 ,color = RED).move_to(np.array([-3,-2,0]))
+        vc2 = Vector(direction = v2 ,color = BLUE).move_to(np.array([-4,1,0]))
+        vc3 = Vector(direction = v3 ,color = YELLOW).move_to(np.array([4,--2,0]))
+        vc4 = Vector(direction = v4,color = ORANGE).move_to(np.array([2,0,0]))
+        dot = Dot((0,0,0), color = WHITE, radius = 0.15)
+        cdot = SmallDot((0,0,0), color = BLACK)
+        ddot = VGroup(dot,cdot)
+
+        vc1_l = TexMobject(r"\vec{x}").next_to(vc1.get_center(),UP)
+        vc2_l = TexMobject(r"\vec{y}").next_to(vc2.get_center(),UP)
+        vc3_l = TexMobject(r"\vec{z}").next_to(vc3.get_center(),UP)
+        vc4_l = TexMobject(r"\vec{w}").next_to(vc4.get_center(),UP)
+        zero_dot = TexMobject(r"\vec{0}").next_to(dot.get_center(),UP+LEFT)
+
+        vcts = VGroup(vc1,vc2,vc3,vc4,ddot)
+        labels = VGroup(vc1_l,vc2_l,vc3_l,vc4_l,zero_dot)
+
+
+        normies = TextMobject("Veamos las normas de los vectores:").to_edge(UP)
+        vc1_n = Vector(direction = np.array([np.linalg.norm(v1),0,0]), color = RED).shift(4*LEFT+0.5*UP)
+        vc2_n = Vector(direction = np.array([np.linalg.norm(v2),0,0]), color = BLUE).shift(4*LEFT)
+        vc3_n = Vector(direction = np.array([np.linalg.norm(v3),0,0]), color = YELLOW).shift(4*LEFT+0.5*DOWN)
+        vc4_n = Vector(direction = np.array([np.linalg.norm(v4),0,0]), color = ORANGE).shift(4*LEFT+DOWN)
+
+        bracv1 = Brace(vc1_n,UP)
+        normv1 = TexMobject(r"\Vert \vec{x} \Vert =" + str(nv1)).next_to(bracv1,UP)
+        brac1 = VGroup(bracv1,normv1)
+        bracv2 = Brace(vc2_n,UP)
+        normv2 = TexMobject(r"\Vert \vec{y} \Vert =" + str(nv2)).next_to(bracv2,UP)
+        brac2 = VGroup(bracv2,normv2)
+        bracv3 = Brace(vc3_n,UP)
+        normv3 = TexMobject(r"\Vert \vec{z} \Vert =" + str(nv3)).next_to(bracv3,UP)
+        brac3 = VGroup(bracv3,normv3)
+        bracv4 = Brace(vc4_n,UP)
+        normv4 = TexMobject(r"\Vert \vec{w} \Vert =" + str(nv4)).next_to(bracv4,UP)
+        brac4 = VGroup(bracv4,normv4)
+        normdot = TexMobject(r"\Vert \vec{0} \Vert = 0").next_to(ddot,DOWN)
+        
+        obse1 = TextMobject("Todos estos vectores tuvieron").shift(3*LEFT+UP)
+        obse2 = TextMobject("una norma mayor a cero.").next_to(obse1,DOWN)
+        obse = VGroup(obse1,obse2)
+        obscero = TexMobject(r"\text{Ahora para el vector}\ \vec{0}").to_edge(UP)
+        unico = TextMobject("¡Es el \\'{u}nico cuya norma se anula!").shift(0.5*UP)
 
 
 
+        self.add(plano)
+        self.play(ShowCreation(plano, runtime = 2))
+        self.play(Write(prop1))
+        self.play(ShowCreation(vcts, runtime = 2),Write(labels))
+        self.wait(2)
+        self.play(FadeOut(plano))
+        self.play(Write(normies),FadeOut(labels))
+        self.play(ddot.shift, 0.5*UP+4*RIGHT,
+                run_time=1,
+                path_arc=1)
+        self.play(ReplacementTransform(vc1,vc1_n), ReplacementTransform(vc2,vc2_n), ReplacementTransform(vc3,vc3_n),
+        ReplacementTransform(vc4,vc4_n))
+        self.play(ShowCreation(brac1))
+        self.wait()
+        self.play(FadeOut(vc1_n),ReplacementTransform(brac1,brac2))
+        self.wait(1.5)
+        self.play(FadeOut(vc2_n),ReplacementTransform(brac2,brac3))
+        self.wait(1.5)
+        self.play(FadeOut(vc3_n),ReplacementTransform(brac3,brac4))
+        self.wait(1.5)
+        self.play(FadeOut(vc4_n),FadeOut(brac4))
+        self.wait(1.5)
+        self.play(Write(obse))
+        self.wait(1.5)
+        self.play(ReplacementTransform(normies,obscero),FadeOut(obse))
+        self.play( ddot.shift , 4*LEFT)
+        self.wait()
+        self.play(Transform(dot,cdot),ShowCreation(normdot))
+        self.wait(2)
+        self.play(Transform(obscero,unico))
+        self.wait(2)
+        self.play(FadeOut(cdot),FadeOut(normdot),FadeOut(obscero))
+        self.play(prop1.shift, 3.5*UP, runtime = 1.5)
+        self.wait(2.2)
+        self.play(FadeOut(prop1))
+
+        ### SEGUNDA PROPIEDAD ###
+        prop2 = TexMobject(r" \Vert \lambda \vec{x} \Vert = \vert \lambda \vert \Vert \vec{x} \Vert").to_edge(DOWN).scale(1.2)
+        plano = NumberPlane()
+        vec1 = Vector(direction=avec,color=RED)
+        vec1_name = TexMobject(r"\vec{x}").next_to(vec1.get_center(),DOWN)
+        vecesc = Vector(direction=lamb*avec,color=RED)
+        vecesc_name = TexMobject(str(lamb)+r"\vec{x}").next_to(vecesc.get_center(),DOWN+RIGHT)
+        avs = Vector(direction = -lamb*avec,color = BLUE)
+        avs_name = TexMobject(str(-1*lamb)+r"\vec{x}").next_to(avs.get_center(),DOWN+RIGHT) 
+        lanorma = TextMobject("Consideremos solamente la \"longitud\" de ambos vectores").shift(3*UP).scale(0.9)
+
+        acostado1 = Vector(direction = np.array([np.linalg.norm(lamb*avec),0,0]), color = RED).shift(4*LEFT+UP)
+        acostado2 = Vector(direction = np.array([np.linalg.norm(-lamb*avec),0,0]), color = BLUE).shift(4*LEFT)
+        abrace1 = Brace(acostado1, UP)
+        abrace2 = Brace(acostado2, DOWN)
+        abraces = VGroup(abrace1,abrace2)
+        abracetex1 = TexMobject(r"\Vert" + str(lamb)+ r"\vec{x} \Vert =" +str(lamb) + r"\Vert \vec{x} \Vert").next_to(abrace1, UP)
+        abracetex2 = TexMobject(r"\Vert" + str(-lamb)+ r" \vec{x}\Vert = " +str(lamb) + r"\Vert \vec{x} \Vert").next_to(abrace2, DOWN)
+        abracetexs = VGroup(abracetex1,abracetex2)
+    
+        obs = TextMobject("Observemos que si el escalar es ").shift(3*RIGHT+UP).scale(0.75)
+        obs1 = TextMobject("negativo, se vuelve positivo").next_to(obs,DOWN).scale(0.75)
+        obs2 = TextMobject("Si es positivo, mantiene su signo.").next_to(obs1,DOWN).scale(0.75)
+        observs = VGroup(obs,obs1, obs2)
+        asimero = TextMobject("¡As\\'{i} act\\'{u}a la funci\\'{o}n valor absoluto!").move_to(obs).scale(0.9).shift(DOWN)
+
+        self.play(ShowCreation(plano, runtime = 2))
+        self.play(Write(prop2))
+        self.wait(2)
+        self.play(ShowCreation(vec1),Write(vec1_name))
+        self.wait()
+        self.play(ReplacementTransform(vec1,vecesc),ReplacementTransform(vec1_name,vecesc_name),ShowCreation(avs),Write(avs_name))
+        self.wait()
+        self.play(FadeOut(plano))
+        self.wait()
+        self.play(Write(lanorma))
+        self.wait()
+        self.play(FadeOut(vecesc_name),FadeOut(avs_name), FadeOut(lanorma))
+        self.play(Transform(vecesc,acostado1),Transform(avs,acostado2),ShowCreation(abraces, runtime = 1),Write(abracetexs))
+        self.wait(2)
+        self.play(Write(observs))
+        self.wait(2)
+        self.play(FadeOut(observs))
+        self.play(Write(asimero))
+        self.wait()
+        self.play(FadeOut(asimero))
+        self.play(
+                prop2.shift, UP*3.5+RIGHT*3,
+                run_time=1,
+                path_arc=2
+        )
+        self.wait(2)
+        self.play(FadeOut(abracetexs),FadeOut(abraces),FadeOut(acostado1),FadeOut(vecesc),FadeOut(avs),FadeOut(prop2))
+        self.wait()
+
+        #### TERCERA PROPIEDAD: DESIGUALDAD DEL TRIANGULO ####
+        prop3 = TexMobject(r" \Vert \vec{x} + \vec{y}\Vert \leq \Vert \vec{x} \Vert+\Vert \vec{y} \Vert").shift(3*DOWN).scale(1.2)
+        plano = NumberPlane()
+        vector1 = Vector(direction = avec, color = RED).shift(2.5*LEFT)
+        vector2 = Vector(direction = bvec, color = BLUE).move_to(avec+bvec/2).shift(2.5*LEFT)
+        vecsum = Vector(direction = avec+bvec, color = YELLOW).shift(2.5*LEFT)
+        vector1_label = TexMobject(r"\vec{x}").next_to(vector1.get_center(),UP)
+        vector2_label = TexMobject(r"\vec{y}").next_to(vector2.get_center(), UP)
+        vecsum_label = TexMobject(r"\vec{x}+\vec{y}").next_to(vecsum.get_center(),DOWN)
+        labels = VGroup(vector1_label,vector2_label,vecsum_label)
+
+        tvector1 = Vector(direction = np.array([anorm,0,0]), color = RED).shift(3.5*LEFT+UP)
+        tvector2 = Vector(direction = np.array([bnorm,0,0]), color = BLUE).shift(3.5*LEFT+UP+np.array([anorm,0,0]))
+        tvecsum = Vector(direction = np.array([sumnorm,0,0]), color = YELLOW).shift(3.5*LEFT+0.5*UP)
+        tvectors = VGroup(tvector1,tvector2,tvecsum)
+
+        brace1 = Brace(tvector1,UP)
+        brace2 = Brace(tvector2,UP)
+        bracesum = Brace(tvecsum, DOWN)
+        lnorm1 = TexMobject(r"\Vert \vec{x} \Vert").next_to(brace1.get_center(),UP)
+        lnorm2 = TexMobject(r"\Vert \vec{y} \Vert").next_to(brace2.get_center(),UP)
+        lnormsum = TexMobject(r"\Vert \vec{x} + \vec{y} \Vert").next_to(bracesum.get_center(),DOWN)
+        braces = VGroup(brace1,brace2,bracesum)
+        lnorms = VGroup(lnorm1,lnorm2,lnormsum)
+        laigualdad = TextMobject("(La igualdad se da cuando los tres vectores son colineales)").shift(3*DOWN).scale(0.8)
+        preguntaa = TextMobject("¿Puedes pensar en la relaci\\'{o}n entre norma y producto interno?").scale(0.9).shift(UP)
+        preguntab = TextMobject("¿Se te ocurre otra forma distinguir que vector es m\\'{a}s \"largo\"?").scale(0.9).shift(DOWN)
+        edita = TextMobject("Edita el c\\'{o}digo para visualizar con m\\'{a}s vectores")
+
+
+
+        self.play(Write(prop3))
+        self.play(ShowCreation(vector1), ShowCreation(vector2))
+        self.play(GrowArrow(vecsum), Write(labels))
+        self.wait(2)
+        self.play(Transform(vector1,tvector1),Transform(vector2,tvector2),Transform(vecsum,tvecsum),FadeOut(labels))
+        self.play(ShowCreation(braces))
+        self.play(Write(lnorms))
+        self.play(prop3.shift , UP, runtime = 1)
+        self.play(Write(laigualdad))
+        self.wait(3)
+        self.play(FadeOut(lnorms),FadeOut(braces),FadeOut(prop3),FadeOut(vector1),FadeOut(vector2),FadeOut(vecsum), FadeOut(laigualdad))
+        self.play(Write(preguntaa),Write(preguntab))
+        self.wait(2.3)
+        self.play(FadeOut(preguntaa),FadeOut(preguntab))
+        self.wait()
+        self.play(Write(edita))
 #### Producto interior y su relación con la norma ####
 
-class ProdInt(Scene):
+class Producto_Interior(Scene):
     def construct(self):
         #signif = TextMobject("El significado geom\\'{e}trico del producto interno")
         titulo = TextMobject("Aspectos geom\\'{e}tricos del producto interno").scale(1.2)
@@ -989,3 +1226,165 @@ class Normas(Scene):
         #aut3.to_edge(DOWN)
 
         self.play(Write(aut1),Write(aut2),Write(aut3))
+
+### Métrica y sus propiedades ###
+     
+### Puntos para propiedad de simetría, PUEDES CAMBIARLOS ###
+posa = np.array([4,0,0])
+posb = np.array([-4,0,0])
+distab = round(np.linalg.norm(posa-posb),3)
+distba = round(np.linalg.norm(posb-posa),3)
+
+### Definición de los puntos para la desigualdad del tríangulo, PUEDES CAMBIARLOS ###
+posx = np.array([3,2,0])
+posy = np.array([-2,-1,0])
+posz = np.array([-2,1,0])
+### Distancias Desig. del triángulo - NO CAMBIAR ###
+dxy = round(np.linalg.norm(posx-posy),3)
+dxz = round(np.linalg.norm(posx-posz),3)
+dzy = round(np.linalg.norm(posz-posy),3)
+
+
+class Metrica(Scene):
+    def construct(self):
+        dist = TextMobject("La m\\'{e}trica: un concepto de distancia").scale(1.2)
+        aux1 = TexMobject(r"\text{Auxiliados del concepto de norma, definimos la distancia}").to_edge(UP).shift(DOWN)
+        aux2 = TexMobject(r"\text{entre dos vectores}\ \vec{x},\ \vec{y}\ \text{como}:").next_to(aux1,DOWN)
+        aux = VGroup(aux1,aux2)
+
+        defdist = TexMobject(r"d(\vec{x},\vec{y}):=\Vert \vec{x} - \vec{y}\Vert").scale(1.2)
+        tprops1 = TextMobject("Una distancia se conoce como \"m\\'{e}trica\"")
+        tprops2 = TextMobject(" si satisface las siguientes propiedades:").next_to(tprops1,DOWN)
+        tprops = VGroup(tprops1,tprops2)
+
+        self.play(Write(dist))
+        self.wait(2)
+        self.play(FadeOut(dist))
+        self.play(Write(aux))
+        self.wait(2)
+        self.play(ReplacementTransform(aux,defdist))
+        self.wait(1.5)
+        self.play(FadeOut(defdist))
+        self.play(Write(tprops))
+        self.wait(1.5)
+        self.play(FadeOut(tprops))
+        
+
+        # PROPIEDAD 1: DEFINIDO SEMI-POSITIVO##
+        distprop1 = TexMobject(r"d(\vec{x},\vec{y}) \geq 0\  \text{y}\ d(\vec{x},\vec{y}) = 0 \Leftrightarrow \vec{x} = \vec{y}").shift(3*DOWN)
+        xdot = Dot((2,1,0), color = RED, radius = 0.12)
+        xdot_label = TexMobject(r"\vec{x}").next_to(xdot,RIGHT)
+        gxdot = VGroup(xdot, xdot_label)
+        ydot = Dot((-2,-1,0), color = BLUE, radius = 0.12)
+        ydot_label = TexMobject(r"\vec{y}").next_to(ydot,LEFT)
+        gydot = VGroup(ydot, ydot_label)
+        arrow1 = DoubleArrow(xdot.get_center(),ydot.get_center())
+        arrow1_label = TexMobject(r"d(\vec{x},\vec{y})").next_to(arrow1.get_center(),DOWN+RIGHT)
+        dmayor = TexMobject(r"d(\vec{x},\vec{y})> 0").shift(3*UP)
+        garrow1 = VGroup(arrow1, arrow1_label)
+        cerodot = Dot((0,0,0), color = PURPLE, radius = 0.12)
+        cerodot_label = TexMobject(r"\vec{x}=\vec{y}").next_to(cerodot,DOWN)
+        gcerodot = VGroup(cerodot,cerodot_label)
+        ceroarrow = DoubleArrow((0,0,0),(0,0,0))
+        dcero = TexMobject(r"d(\vec{x},\vec{y}) = 0").shift(3*UP)
+
+
+        self.play(Write(distprop1))
+        self.wait()
+        self.play(ShowCreation(gxdot), ShowCreation(gydot))
+        self.wait(1)
+        self.play(GrowArrow(arrow1),Write(dmayor))
+        self.wait(2)
+        self.play(ReplacementTransform(gxdot,gcerodot),ReplacementTransform(ydot,cerodot),Transform(arrow1,ceroarrow),
+        FadeOut(ydot_label))
+        self.wait()
+        self.play(ReplacementTransform(dmayor,dcero))
+        self.wait()
+        self.play(FadeOut(gcerodot),FadeOut(dcero))
+        self.play(distprop1.shift, 3*UP, runtime = 1)
+        self.wait()
+        self.play(FadeOut(distprop1))
+
+        ### PROPIEDAD 2: SIMETRÍA ###
+        distprop2 = TexMobject(r"d(\vec{x},\vec{y}) = d(\vec{y},\vec{x})").shift(3*DOWN)
+        adot = Dot(posa, color = RED, radius = 0.12)
+        adot_label = TexMobject(r"\vec{x}").next_to(adot,DOWN)
+        gadot = VGroup(adot,adot_label)
+        bdot = Dot(posb, color = BLUE, radius = 0.12)
+        bdot_label = TexMobject(r"\vec{y}").next_to(bdot,DOWN)
+        gbdot = VGroup(bdot,bdot_label)
+
+        ab_arrow = Arrow(adot.get_center(),bdot.get_center())
+        ab_arrow_lb= TexMobject(r"d(\vec{x},\vec{y}) = "+str(distab)).next_to(ab_arrow,3*UP)
+        ba_arrow = Arrow(bdot.get_center(),adot.get_center())
+        ba_arrow_lb= TexMobject(r"d(\vec{y},\vec{x})= "+ str(distba)).move_to(ab_arrow_lb)
+
+        self.play(Write(distprop2))
+        self.wait()
+        self.play(ShowCreation(gadot),ShowCreation(gbdot))
+        self.play(GrowArrow(ab_arrow),Write(ab_arrow_lb))
+        self.wait(2)
+        self.play(ReplacementTransform(ab_arrow,ba_arrow), Transform(ab_arrow_lb,ba_arrow_lb))
+        self.wait()
+        self.play(FadeOut(gadot),FadeOut(gbdot),FadeOut(ba_arrow),FadeOut(ab_arrow_lb))
+        self.play(distprop2.shift, 3*UP, runtime = 1)
+        self.wait(2)
+        self.play(FadeOut(distprop2))
+
+        ### PROPIEDAD 3: DESIG DEL TRIÁNGULO ###
+        distprop3 = TexMobject(r"d(\vec{x},\vec{y}) \leq d(\vec{x},\vec{z})+d(\vec{z},\vec{y})").shift(3*DOWN)
+        newxdot = Dot(posx,color = RED, radius = 0.12)
+        newxdot_label =  TexMobject(r"\vec{x}").next_to(newxdot,DOWN)
+        gnewxdot = VGroup(newxdot,newxdot_label)
+        newydot = Dot(posy,color = BLUE, radius = 0.12)
+        newydot_label =  TexMobject(r"\vec{y}").next_to(newydot,DOWN)
+        gnewydot = VGroup(newydot,newydot_label)
+        zdot = Dot(posz, color = YELLOW, radius = 0.12)
+        zdot_label =  TexMobject(r"\vec{z}").next_to(zdot,UP)
+        gzdot = VGroup(zdot,zdot_label)
+
+        narrow1 = DoubleArrow(newxdot.get_center(),newydot.get_center(),stroke_width = 4)
+        narrow1_label = TexMobject(r"d(\vec{x},\vec{y})").next_to(narrow1.get_center(),DOWN+RIGHT)    
+        arrow2 = DoubleArrow(newxdot.get_center(),zdot.get_center(),stroke_width = 4)
+        arrow2_label = TexMobject(r"d(\vec{x},\vec{z})").next_to(arrow2.get_center(),UP)
+        garrow2 = VGroup(arrow2,arrow2_label)
+        arrow3 = DoubleArrow(newydot.get_center(),zdot.get_center(),stroke_width = 4)
+        arrow3_label = TexMobject(r"d(\vec{z},\vec{y})").next_to(arrow3.get_center(),2*LEFT)
+        garrow3 = VGroup(arrow3,arrow3_label)
+
+        tdxz = DoubleArrow((0,0,0),(dxz,0,0), color = RED).shift(2.5*LEFT+UP)
+        tdzy = DoubleArrow((0,0,0),(dzy,0,0), color = BLUE).shift(2.5*LEFT+UP+(dxz*0.9,0,0))
+        tdxy = DoubleArrow((0,0,0),(dxy,0,0), color = YELLOW).shift(2.5*LEFT)
+        brace1 = Brace(tdxz,UP)
+        brace2 = Brace(tdzy,UP)
+        bracesum = Brace(tdxy, DOWN)
+        ldxz = TexMobject(r"d(\vec{x},\vec{z})").next_to(brace1.get_center(),UP)
+        ldzy = TexMobject(r"d(\vec{z},\vec{y})").next_to(brace2.get_center(),UP)
+        ldxy = TexMobject(r"d(\vec{x},\vec{y})").next_to(bracesum.get_center(),DOWN)
+        braces = VGroup(brace1,brace2,bracesum)
+        dists = VGroup(ldxz,ldzy,ldxy)
+        laigualdad = TextMobject("(La igualdad se da si los tres puntos son colineales)").shift(DOWN).scale(0.8)
+        revisa = TextMobject("Edita el c\\'{o}digo para visualizar con m\\'{a}s vectores")
+
+        self.play(Write(distprop3))
+        self.wait()
+        self.play(ShowCreation(gnewxdot),ShowCreation(gnewydot),ShowCreation(gzdot))
+        self.play(GrowArrow(arrow2),GrowArrow(arrow3))
+        self.play(Write(arrow2_label),Write(arrow3_label))
+        self.wait()
+        self.play(GrowArrow(narrow1))
+        self.play(Write(narrow1_label))
+        self.wait()
+        self.play(FadeOut(gnewxdot),FadeOut(gnewydot),FadeOut(gzdot))
+        self.play(FadeOut(narrow1_label),FadeOut(arrow2_label),FadeOut(arrow3_label))
+        self.play(ReplacementTransform(narrow1,tdxy),ReplacementTransform(arrow2,tdxz),ReplacementTransform(arrow3,tdzy))
+        self.play(ShowCreation(braces),ShowCreation(dists))
+        self.wait(3)
+        self.play(FadeOut(dists),FadeOut(braces),FadeOut(tdxy),FadeOut(tdxz),FadeOut(tdzy))
+        self.play(distprop3.shift, 3*UP, runtime = 1)
+        self.play(Write(laigualdad))
+        self.wait(2)
+        self.play(FadeOut(laigualdad),FadeOut(distprop3))
+        self.wait()
+        self.play(Write(revisa))
+        self.wait()
