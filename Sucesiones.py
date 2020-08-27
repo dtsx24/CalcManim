@@ -1,4 +1,338 @@
 from manimlib.imports import *
+
+##grid para animaciones de definicion y definicion de limite
+
+class Grid(VGroup):
+    CONFIG = {
+        "height": 6.0,
+        "width": 6.0,
+    }
+
+    def __init__(self, rows, columns, **kwargs):
+        digest_config(self, kwargs, locals())
+        super().__init__(**kwargs)
+
+        x_step = self.width / self.columns
+        y_step = self.height / self.rows
+
+        for x in np.arange(0, self.width + x_step, x_step):
+            self.add(Line(
+                [x - self.width / 2., -self.height / 2., 0],
+                [x - self.width / 2., self.height / 2., 0],
+            ))
+        for y in np.arange(0, self.height + y_step, y_step):
+            self.add(Line(
+                [-self.width / 2., y - self.height / 2., 0],
+                [self.width / 2., y - self.height / 2., 0]
+            ))
+
+class ScreenGrid(VGroup):
+    CONFIG = {
+        "rows": 8,
+        "columns": 14,
+        "height": FRAME_Y_RADIUS * 2,
+        "width": 14,
+        "grid_stroke": 0.5,
+        "grid_color": WHITE,
+        "axis_color": RED,
+        "axis_stroke": 2,
+        "labels_scale": 0.25,
+        "labels_buff": 0,
+        "number_decimals": 2
+    }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        rows = self.rows
+        columns = self.columns
+        grid = Grid(width=self.width, height=self.height, rows=rows, columns=columns)
+        grid.set_stroke(self.grid_color, self.grid_stroke)
+
+        vector_ii = ORIGIN + np.array((- self.width / 2, - self.height / 2, 0))
+        vector_si = ORIGIN + np.array((- self.width / 2, self.height / 2, 0))
+        vector_sd = ORIGIN + np.array((self.width / 2, self.height / 2, 0))
+
+        axes_x = Line(LEFT * self.width / 2, RIGHT * self.width / 2)
+        axes_y = Line(DOWN * self.height / 2, UP * self.height / 2)
+
+        axes = VGroup(axes_x, axes_y).set_stroke(self.axis_color, self.axis_stroke)
+
+        divisions_x = self.width / columns
+        divisions_y = self.height / rows
+
+        directions_buff_x = [UP, DOWN]
+        directions_buff_y = [RIGHT, LEFT]
+        dd_buff = [directions_buff_x, directions_buff_y]
+        vectors_init_x = [vector_ii, vector_si]
+        vectors_init_y = [vector_si, vector_sd]
+        vectors_init = [vectors_init_x, vectors_init_y]
+        divisions = [divisions_x, divisions_y]
+        orientations = [RIGHT, DOWN]
+        labels = VGroup()
+        set_changes = zip([columns, rows], divisions, orientations, [0, 1], vectors_init, dd_buff)
+        for c_and_r, division, orientation, coord, vi_c, d_buff in set_changes:
+            for i in range(1, c_and_r):
+                for v_i, directions_buff in zip(vi_c, d_buff):
+                    ubication = v_i + orientation * division * i
+                    coord_point = round(ubication[coord], self.number_decimals)
+                    label = Text(f"{coord_point}",font="Arial",stroke_width=0).scale(self.labels_scale)
+                    label.next_to(ubication, directions_buff, buff=self.labels_buff)
+                    labels.add(label)
+
+        self.add(grid, axes, labels)
+
+#define la sucesión para usar definicion_sucesiones y definicion de limite:
+n_sup = 150
+cjto_pts_sucesion = []
+
+for i in range(1,n_sup):
+    x = 1/(0.2*i)
+    y = 1/(0.2*i)
+    cjto_pts_sucesion.append((x,y,0))
+
+n_sup_1 = 30
+cjto_pts_sucesion_1 = []
+for i in range(1,n_sup_1):
+    x_1 = (np.exp(i/20))*(np.cos(0.7*i))
+    y_1 = (np.exp(i/20))*(np.sin(0.7*i))
+    cjto_pts_sucesion_1.append((x_1,y_1,0))
+
+##definicion de sucesiones    
+    
+class Definicion_Sucesiones(Scene):
+    def construct(self):
+        ##texto:
+        t_1 = TextMobject('''¿Recuerdas la definición de sucesiones en $\\mathbb{R}?$ ''')
+        t_2 = TextMobject('''Una sucesión es una función de: \n
+                            $\\mathbb{N}\\rightarrow\\mathbb{R}$ ''')
+        t_3 = TextMobject('''Nota que es distinto hablar del conjunto \n
+                            que contiene a todos los \n
+                            elementos de dicha sucesión:\n
+                            $\{ x_n \}$, \n
+                            donde $x_n = s(n)$ y \n
+                            donde $s$ es la sucesión.''')
+        t_4 = TextMobject('''Bueno! Pues es análogo para \n
+                            sucesiones de $\\mathbb{R}^n$ ''')
+        t_5 = TextMobject('''Recuerda que un vector en $\\mathbb{R}^n$, \n
+                            es una terna; de la forma: \n
+                            $(x_1,x_2,\\dots,x_n)$, donde $x_i\\in \\mathbb{R}$, \n
+                            para cualquier $i\\in \{ 1,\\dots, n \}$''')
+        t_6 = TextMobject('''Por lo que para definir una sucesión \n
+                            en $\\mathbb{R}^n$  \n
+                            basta definir una sucesión para \n
+                            cada entrada vectorial, es decir: \n
+                            $\\vec{s}: \\mathbb{N}\\rightarrow \\mathbb{R}^n$ ''')
+        t_7 = TextMobject('''O sea que: \n
+                            $\\vec{s}(n) = (s_1(n),s_2(n),\\dots, s_n(n))$ \n
+                            Donde $s_i$ es una sucesión en $\\mathbb{R}$.''')
+        t_8 = TextMobject('''Por ejemplo en $\\mathbb{R}^2$, tomemos: \n
+                            $\\vec{s}(n) = ((e^{-n})\\cos(n),(e^{-n})\\sin(n))$''')
+        t_9 = TextMobject('''Pintemos las parejas de la sucesión en el plano:''')
+        ##mas
+        grid = ScreenGrid()
+        Elementos = [Dot(point = i) for i in cjto_pts_sucesion_1]
+        Elementos_t = [TexMobject('\\vec{s}_{%i}' %i).next_to(Elementos[i], DOWN) for i in range(0, n_sup_1-1)]
+        Elementos_g = VGroup(*Elementos)
+        Elementos_t_g = VGroup(*Elementos_t)
+        ##animación:
+        self.play(Write(t_1))
+        self.wait()
+        self.play(ReplacementTransform(t_1,t_2))
+        self.wait()
+        self.play(ReplacementTransform(t_2,t_3))
+        self.wait()
+        self.play(ReplacementTransform(t_3,t_4))
+        self.wait()
+        self.play(ReplacementTransform(t_4,t_5))
+        self.wait()
+        self.play(ReplacementTransform(t_5,t_6))
+        self.wait()
+        self.play(ReplacementTransform(t_6,t_7))
+        self.wait()
+        self.play(ReplacementTransform(t_7,t_8))
+        self.wait()
+        self.play(ReplacementTransform(t_8,t_9))
+        self.wait()
+        self.play(ReplacementTransform(t_9,grid))
+        self.wait()
+        self.play(Write(Elementos_g),
+                  Write(Elementos_t_g), run_time = 30)
+        self.wait()
+
+    
+    
+###Definicion de límite de sucesiones
+class Definicion_Limite_Sucesiones(MovingCameraScene, Scene):
+    def setup(self):
+        Scene.setup(self)
+        MovingCameraScene.setup(self)
+    def construct(self):
+        definicion = TextMobject('\textit{Definición}')
+        def_1 = TexMobject('\\lim_{n\\rightarrow\\infty}\\vec{x}_n = \\vec{x}_0')
+        def_2 = TexMobject('\\Leftrightarrow')
+        def_3 = TexMobject('\\forall r>0 \ \\exists \ N\\in \\mathbb{N} \ tq. \ \\forall n>N \ \\vec{x} \\in \\mathbb{B}_\\epsilon(\\vec{x}_0)')
+        
+        def_1.move_to((0,1,0))
+        def_2.move_to((0,0,0))
+        def_3.move_to((0,-1,0))
+
+        gpo_1 = VGroup(def_1,def_2,def_3)
+        
+        text_1 = TextMobject('Pero... ¿Qué nos dice geométricamente esta definición?')
+
+        grid = ScreenGrid()
+
+        text_2 = TextMobject('''Supongamos que tenemos una sucesión en el plano! \n
+                                de hecho supongamos una muy sencilla: \n
+                                $\\vec{x}_n = (1/n,1/n)$''')
+        text_3 = TextMobject('Recuerda que es una función de $\\mathbb{N}\\rightarrow\mathbb{R}^2$')
+        
+        text_2.set_color(BLACK)
+        text_3.set_color(BLACK)
+
+        text_2.bg = SurroundingRectangle(text_2,color=RED,fill_color=WHITE, fill_opacity=10)
+        text_3.bg = SurroundingRectangle(text_3,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_2 = VGroup(text_2.bg,text_2)
+        gpo_3 = VGroup(text_3.bg,text_3)
+
+        gpo_2.move_to((-3,2,0))\
+             .scale(0.5)
+        gpo_3.next_to(gpo_2, DOWN)\
+             .scale(0.5)
+
+        text_3_1 = TextMobject('''Supongamos que queremos probar que el límite es el vector $(0,0)$.''').set_color(BLACK)
+
+        text_3_1.bg = SurroundingRectangle(text_3_1,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_3_1 = VGroup(text_3_1.bg, text_3_1).scale(0.5)\
+                                         .next_to(gpo_3, DOWN)
+
+        puntos_objetos = []
+        puntos_objetos_1 = []
+
+        for i in cjto_pts_sucesion:
+            punto_i = Dot(point = i, radius = 0.025)
+            punto_i_1 = Dot(point = i, radius = 0.001)
+            puntos_objetos.append(punto_i)
+            puntos_objetos_1.append(punto_i_1)
+
+        gpo_4 = VGroup(*puntos_objetos)
+        gpo_4_1 = VGroup(*puntos_objetos_1)
+
+        circulo = Circle(radius = 0.5)
+        circulo_t = TextMobject('Entonces damos a la bola de radio épsilon... ($\\epsilon$)')\
+                    .set_color(RED)\
+                    .move_to((1,-1,0))
+
+        radio = Brace(circulo, RIGHT)
+        radio_t = TextMobject('$2\\epsilon$')\
+                  .next_to(radio.get_center(), RIGHT, buff = 0.2)
+
+        text_4 = TextMobject('''Entonces, recordemos la parte de la definición: \n
+                                $\\exists N\\in \mathbb{N}, \ tq. \ \\forall n>N, \\vec{x}_n\\in \\mathbb{B}_\\epsilon(\\vec{x}_0)$ \n
+                                Que en este caso $\\vec{x}_0 = (0,0)$.''').set_color(BLACK)
+        text_4.bg = SurroundingRectangle(text_4,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_5 = VGroup(text_4.bg, text_4).scale(0.4)\
+                                         .move_to((0,-1,0))
+
+        text_5 = TextMobject('''Esta $N$ debe ser tal que todos los elementos \n
+                                de la sucesión inmediatos despues del $N$-ésimo\n
+                                elemento, están dentro de la bola de radio épsilon. \n
+                                Hagamos un zoom...''').set_color(BLACK)
+
+        text_5.bg = SurroundingRectangle(text_5,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_6 = VGroup(text_5.bg, text_5).scale(0.4)\
+                                         .move_to((0,-1.5,0))
+
+        N_esimo_pto = Dot(point = gpo_4[14].get_center(), radius = 0.01, color = YELLOW)
+        N_m_u_esimo_pto = Dot(point = gpo_4[13].get_center(), radius = 0.01, color = YELLOW)
+
+        text_6 = TextMobject('''Nota como estos dos puntos podrían ser el $N$-ésimo \n
+                                ya que todos los siguientes puntos de la sucesión \n
+                                estan dentro de la bola de radio épsilon.''').set_color(BLACK)
+
+        text_6.bg = SurroundingRectangle(text_6,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_7 = VGroup(text_6.bg, text_6).scale(0.04)\
+                                         .move_to((1/(2*np.sqrt(2)),1/(2*np.sqrt(2))+0.07,0))
+
+        dentro_bola_antes_dentro = [i for i in puntos_objetos_1[15:]]
+        dentro_bola_despues_dentro = [Dot(point = i.get_center(), radius = 0.01, color = BLUE) for i in puntos_objetos_1[15:]]
+        dentro_bola_antes_fuera = [i for i in puntos_objetos_1[0:13]]
+        dentro_bola_despues_fuera = [Dot(point = i.get_center(), radius = 0.01, color = ORANGE) for i in puntos_objetos_1[0:13]]
+
+        dentro_bola_g_antes_dentro = VGroup(*dentro_bola_antes_dentro)
+        dentro_bola_g_despues_dentro = VGroup(*dentro_bola_despues_dentro)
+        dentro_bola_g_antes_fuera = VGroup(*dentro_bola_antes_fuera)
+        dentro_bola_g_despues_fuera = VGroup(*dentro_bola_despues_fuera)
+
+        text_7 = TextMobject('''Por último nota como  \n
+                                hay solamente una cantidad finita fuera de la bola \n
+                                y una cantidad infinita numerable dentro de la bola... \n
+                                ¿puedes probarlo?''').set_color(BLACK)
+
+        text_7.bg = SurroundingRectangle(text_7,color=RED,fill_color=WHITE, fill_opacity=10)
+
+        gpo_8 = VGroup(text_7.bg, text_7).scale(0.25)\
+                                         .move_to((-0.5,1.5,0))
+
+        ###animación
+
+        self.play(Write(gpo_1))
+        self.wait()
+        self.play(ReplacementTransform(gpo_1, text_1))
+        self.wait()
+        self.play(FadeOut(text_1))
+        self.wait()
+        self.play(Write(grid))
+        self.wait()
+        self.play(Write(gpo_2))
+        self.wait()
+        self.play(Write(gpo_3))
+        self.wait()
+        self.play(Write(gpo_3_1))
+        self.wait()
+        self.play(FadeOut(gpo_3_1), Write(gpo_4), run_time = 3)
+        self.wait()
+        self.play(Write(circulo_t))
+        self.wait()
+        self.play(FadeOut(circulo_t),
+                  self.camera_frame.scale, 0.25, 
+                  self.camera_frame.move_to, (0,0,0))
+        self.wait()
+        self.play(Write(circulo),)
+        self.wait()
+        self.play(Write(radio), Write(radio_t))
+        self.wait()
+        self.play(FadeOut(radio), FadeOut(radio_t))
+        self.wait()
+        self.play(FadeOut(gpo_2), FadeOut(gpo_3), self.camera_frame.scale, 2)
+        self.wait()
+        self.play(Write(gpo_5))
+        self.wait()
+        self.play(ReplacementTransform(gpo_5, gpo_6))
+        self.wait()
+        self.play(FadeOut(gpo_6), self.camera_frame.scale, 0.075
+                                , self.camera_frame.move_to, (0.35,0.35,0)
+                                , ReplacementTransform(gpo_4, gpo_4_1))
+        self.wait()
+        self.play(ReplacementTransform(gpo_4_1[14], N_esimo_pto),
+                  ReplacementTransform(gpo_4_1[13], N_m_u_esimo_pto))
+        self.wait()
+        self.play(Write(gpo_7))
+        self.wait()
+        self.play(self.camera_frame.scale, 10, FadeOut(gpo_7))
+        self.play(ReplacementTransform(dentro_bola_g_antes_dentro, dentro_bola_g_despues_dentro),
+                  )
+        self.wait()
+        self.play(Write(gpo_8))
+        self.wait()
+        self.play(ReplacementTransform(dentro_bola_g_antes_fuera, dentro_bola_g_despues_fuera))
+
+
 ### EJEMPLOS SUCESIONES
 class Ejemplos_Sucesiones(Scene):
     def construct(self):
