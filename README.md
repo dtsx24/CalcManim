@@ -27,3 +27,16 @@ Conceptos de cálculo diferencial multivariable animados en [manim](https://gith
   - El Teorema de los Rectángulos Anidados
   - El Teorema de Bolzano-Weierstrass 
   
+## Topología de R^n:
+  - Definición de una bola/vecindad
+  - Clasificación de puntos: Interior, exterior, frontera
+  - Conjuntos abiertos
+  - Conjuntos cerrados
+  - Propiedades/observación de conjuntos abiertos y cerrados
+  - Cerradura de un conjunto
+  - Clasificación de puntos: Aislado y de Acumulación
+  - Cubiertas
+  - Lema del número de Lebesgue
+  - Conjuntos Disconexos/Conexos
+  - Conjuntos Convexos
+  
