@@ -1,9 +1,12 @@
 from manimlib.imports import *
+#Para versiones anteriores de manim usar:
+#from big_ol_pile_of_manim_imports import *
+
 
 #### SUGERENCIA: SIEMPRE QUE CAMBIESLOS VECTORES A VISUALIZAR ###
 ### CONSIDERA QUE EL PLNO ES DE [-7,7]x[-4,4] ####
 
-#### Este GRID SOLO SE USA PARA LA CLASE BOLAS ####
+#### ESTE GRID SOLO SE USA PARA LA CLASE BOLAS ####
 
 class Grid(VGroup):
     CONFIG = {
@@ -86,7 +89,10 @@ class ScreenGrid(VGroup):
 
 #### Hasta aquí llega el GRID para la clase Bolas
 
-#################################
+#########################
+#### BOLAS / VECINDADES #####
+#########################
+
 class  Bolas(Scene):
    
     def construct (self):
@@ -148,7 +154,9 @@ class  Bolas(Scene):
         self.wait(4)
         self.play(FadeOut(text8))
 
-###########################################################
+#########################
+#### TIPOS DE PUNTOS #####
+#########################
 
 class TiposPuntos(Scene):
     def construct(self):
@@ -281,7 +289,9 @@ class TiposPuntos(Scene):
         self.play(FadeOut(texto_4),FadeOut(texto_5),FadeOut(texto_6))
         self.play(Write(texto_7))
 
-###########################################################
+#########################
+#### CONJUNTOS ABIERTOS #####
+#########################
 
 class Conjuntos_abiertos (Scene):
     def construct (self):
@@ -441,7 +451,9 @@ class Conjuntos_abiertos (Scene):
         self.play(Write(text12))
         self.wait()
 
-###############################################################
+#########################
+#### CONJUNTOS CERRADOS #####
+#########################
 
 class Conjuntos_cerrados (Scene):
     def construct(self):
@@ -600,7 +612,9 @@ class Conjuntos_cerrados (Scene):
         self.play(ReplacementTransform(text12,pregunta))
         self.wait(2)
 
-###################################
+#########################
+#### OBS CERRADOS/ABIERTOS #####
+#########################
         
 class ObservacionCerradosAbiertos(Scene):
     def construct(self):
@@ -715,7 +729,9 @@ class ObservacionCerradosAbiertos(Scene):
         self.wait()
         self.play(FadeOut(pregunta3),FadeOut(pregunta_1))
 
-###################################
+#########################
+#### CERRADURA #####
+#########################
 
 class Cerradura(Scene):
     def construct(self):
@@ -781,6 +797,8 @@ class Cerradura(Scene):
         self.wait(2)
         self.play(FadeOut(text3),FadeOut(prop1))
 
+###################################
+#### PUNTOS AISLADOS/ACUMULACION #####
 ###################################
 
 class Puntos_Aislado_y_Acumulacion(Scene):
@@ -868,7 +886,9 @@ class Puntos_Aislado_y_Acumulacion(Scene):
         self.wait(2)
         self.play(FadeOut(propiedades))
 
-###################################
+########################
+#### CUBIERTAS     #####
+########################
 
 class Cubierta(Scene):
     def construct(self):
@@ -951,7 +971,9 @@ class Cubierta(Scene):
         self.wait(2)
         self.play(FadeOut(Group_4))
 
-###################################
+########################
+#### NUM LEBESGUE  #####
+########################
 
 class NumLebesgue(Scene):
     def construct(self):
@@ -1018,7 +1040,9 @@ class NumLebesgue(Scene):
         self.wait(2)
         self.play(FadeOut(t_7))
 
-###################################
+#############################
+#### DISCONEXOS/CONEXOS #####
+#############################
 
 class ConjuntosConexos(Scene):
     def construct(self):
@@ -1254,7 +1278,9 @@ class ConjuntosConexos(Scene):
         self.wait(2)
         self.play(FadeOut(cfinal))
 
-###################################
+#############################
+#### CONJUNTOS CONVEXOS #####
+#############################
 
 class ConjuntosConvexos(Scene):
     def construct(self):
