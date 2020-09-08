@@ -494,7 +494,7 @@ class Opera(Scene):
         #### Suma ####
 
         vecsum = Vector(direction=a + b, color=GREEN_SCREEN)
-        vecsum_name = TexMobject("a+b")
+        vecsum_name = TexMobject("a+b").set_color(GREEN_SCREEN)
         vecsum_name.next_to(vecsum, LEFT)
         suma1 = TextMobject("Podemos ver la suma de dos")
         suma2 = TextMobject("vectores con flechas")
@@ -570,26 +570,26 @@ class Bases(Scene):
 
         t_1 = TextMobject('Idea intuitiva de lo que significa una base.')
         t_2 = TextMobject('Pensemos en el plano cartesiano...')
-        t_3 = TextMobject('Pensemos en la base usual...')
-        t_4 = TextMobject('''La can\\'{o}nica''')
+        t_3 = TextMobject('y en la base usual...')
+        t_4 = TextMobject('''la can\\'{o}nica.''')
         t_5 = TexMobject('\\xi = \{ \\vec{e}_1, \\vec{e}_2 \} = \{ (1,0), (0,1) \}')
         t_6 = TextMobject('''Supongamos que queremos "caracterizar" \n
                              el vector $\\vec{x} = (1,2)$, con la base $\\xi$.''')
         t_7 = TextMobject('''Es claro que: \n
                              $\\vec{x} = 1\\cdot(1,0)+2\\cdot(0,1) = (1,2)$''')
         t_8 = TextMobject('''Que geom\\'{e}tricamente es...''')
-        t_9 = TextMobject('''Solamente caminar dos veces el camino fijado \n
-                             por el vector $(0,1)$ y luego caminar una  \n
-                             sola vez por el camino fijado por (1,0)''')
+        t_9 = TextMobject('''Solamente caminar una vez por el camino fijado \n
+                             por el vector $\\vec{e}_1=(1,0)$ y luego caminar dos  \n
+                             veces por el camino fijado por $\\vec{e}_2=(0,1)$.''')
         t_9.move_to((0, -1.3, 0))
         t_10 = TextMobject('''Ahora supongamos que tenemos la base: \n
                               $\\gamma = \{ (2,1),(1,-1) \}$''')
         t_11 = TextMobject('''Sabemos que... \n
                               $\\vec{x} = 1\cdot(2,1)+(-1)\cdot(1,-1)$''')
-        t_12 = TextMobject('''¿Pero geom\\'{e}tricamente qu\\'{e} es esta "combinaci\\'{o}n lineal"?''')
+        t_12 = TextMobject('''¿Pero geom\\'{e}tricamente qu\\'{e} es esta combinaci\\'{o}n lineal?''')
         t_13 = TextMobject('''¡Claro! Solamente es tomar un camino distinto \n
-                              dado por esta "base" \n
-                              para llegar al mimso vector $\\vec{x}$ \n
+                              dado por esta base \n
+                              para llegar al mismo vector $\\vec{x}$ \n
                               en el espacio vectorial $\\mathbb{R}^2$.''')
 
         ###vectores:
@@ -1165,14 +1165,14 @@ class Normas(Scene):
         intro2 = TexMobject(r"\text{utilizando diferentes normas en }\mathbb{R}^2")
         intro2.next_to(intro1, DOWN)
         intro = VGroup(intro1, intro2)
-        circ1 = TextMobject("Recordemos que la definici\\'{o}n del c\\'{i}rculo es")
+        circ1 = TextMobject("Recordemos que la definici\\'{o}n de una circunferencia es")
         circ2 = TexMobject(r"\mathbb{S}^1=\{x\in\mathbb{R}^2 : \Vert x \Vert =1\}")
         circ2.next_to(circ1, DOWN)
         circ = VGroup(circ1, circ2)
 
         self.play(Write(intro))
         self.wait(2)
-        self.play(ReplacementTransform(intro, circ))
+        self.play(ReplacementTransform(intro,circ))
         self.wait(2)
         self.play(FadeOut(circ))
 
@@ -1180,154 +1180,143 @@ class Normas(Scene):
 
         title1 = TextMobject("Norma 1")
         norm1 = TexMobject(r"\Vert x \Vert_1=\vert x_1 \vert + \vert x_2 \vert")
-        norm1.next_to(title1, DOWN)
-        Group1 = VGroup(title1, norm1)
+        norm1.next_to(title1,DOWN)
+        Group1 = VGroup(title1,norm1)
         Group1.scale(0.75)
         Group1.set_color(RED)
-        fig1 = Square(side_length=np.sqrt(2), color=RED)
-        fig1.rotate(PI / 4)
+        fig1 = Square(side_length=np.sqrt(2),color=RED)
+        fig1.rotate(PI/4)
 
-        Group1.bg = SurroundingRectangle(Group1, color=WHITE, fill_color=BLACK,
-                                       fill_opacity=1)
-        Group11 = VGroup(Group1.bg, Group1)
-
-        self.play(Write(Group11))
+        self.play(Write(Group1))
         self.wait()
-        self.play(ApplyMethod(Group11.to_edge, UP))
+        self.play(ApplyMethod(Group1.to_edge,UP))
         self.play(ShowCreation(plano))
         self.play(ShowCreation(fig1))
         self.wait(2)
-        self.play(ApplyMethod(Group11.move_to, np.array([-5, 3, 0])))
+        self.play(ApplyMethod(Group1.move_to,np.array([-5,3,0])))
 
         #### Norma 2 ####
 
-
-        title2 = TextMobject("Norma 2")
+        title2 =TextMobject("Norma 2")
         norm2 = TexMobject(r"\Vert x \Vert_2=\left(x_1^2 + x_2^2 \right)^{1/2}")
-        norm2.next_to(title2, DOWN)
-        Group2 = VGroup(title2, norm2)
+        norm2.next_to(title2,DOWN)
+        Group2 = VGroup(title2,norm2)
         Group2.scale(0.75)
         Group2.set_color(YELLOW)
-        fig2 = Circle(radius=1, color=YELLOW)
+        fig2 = Circle(radius=1,color=YELLOW)
 
-        Group2.bg = SurroundingRectangle(Group2, color=WHITE, fill_color=BLACK,
-                                         fill_opacity=1)
-        Group12 = VGroup(Group2.bg, Group2)
-
-        self.play(Write(Group12))
+        self.play(Write(Group2))
         self.wait()
-        self.play(ApplyMethod(Group12.to_edge, UP))
+        self.play(ApplyMethod(Group2.to_edge,UP))
         self.play(ShowCreation(fig2))
         self.wait(2)
-        self.play(ApplyMethod(Group12.move_to, np.array([5, 3, 0])))
+        self.play(ApplyMethod(Group2.move_to,np.array([5,3,0])))
 
         #### Norma infinito ####
 
         title3 = TextMobject("Norma infinito")
         norminfty = TexMobject(r"\Vert x \Vert_{\infty} = \max\{\vert x_i \vert : i \in \{1,2\}\}")
-        norminfty.next_to(title3, DOWN)
-        Group3 = VGroup(title3, norminfty)
+        norminfty.next_to(title3,DOWN)
+        Group3 = VGroup(title3,norminfty)
         Group3.scale(0.75)
         Group3.set_color(GREEN_SCREEN)
-        fig3 = Square(side_length=2, color=GREEN_SCREEN)
+        fig3 = Square(side_length=2,color=GREEN_SCREEN)
 
-        Group3.bg = SurroundingRectangle(Group3, color=WHITE, fill_color=BLACK,
-                                         fill_opacity=1)
-        Group13 = VGroup(Group3.bg, Group3)
-
-        self.play(Write(Group13))
+        self.play(Write(Group3))
         self.wait()
-        self.play(ApplyMethod(Group13.to_edge, UP))
+        self.play(ApplyMethod(Group3.to_edge,UP))
         self.play(ShowCreation(fig3))
         self.wait(2)
-        self.remove(Group11, Group12, Group13, plano, fig1, fig2, fig3)
-
+        self.remove(Group1,Group2,Group3,plano,fig1,fig2,fig3)
+        
         #### Norma p ####
 
         intro1 = TextMobject("Podemos definir una norma similar a las anteriores")
         intro2 = TexMobject(r"\text{para cada } p\in\mathbb{R},\ p\geq 1")
-        intro2.next_to(intro1, DOWN)
-        intro = VGroup(intro1, intro2)
+        intro2.next_to(intro1,DOWN)
+        intro = VGroup(intro1,intro2)
         titlep = TexMobject(r"\text{Norma } p")
         normp = TexMobject(r"\Vert x \Vert_p = \left(\sum_{i=1}^n \vert x_i \vert ^p \right)^{1/p}")
-        normp.next_to(titlep, DOWN)
-        Groupp = VGroup(titlep, normp)
+        normp.next_to(titlep,DOWN)
+        Groupp = VGroup(titlep,normp)
         text = TextMobject("Veamos que pasa cuando $p$ crece en $\\mathbb{R}$")
 
         self.play(Write(intro))
         self.wait(2)
-        self.play(ReplacementTransform(intro, Groupp))
+        self.play(ReplacementTransform(intro,Groupp))
         self.wait(2)
         self.play(FadeOut(Groupp))
         self.play(Write(text))
         self.play(FadeOut(text))
         self.play(ShowCreation(plano))
-        self.play(FadeIn(Group13), ShowCreation(fig3))
-        self.play(ApplyMethod(Group13.to_edge, DOWN))
+        self.play(FadeIn(Group3),ShowCreation(fig3))
+        self.play(ApplyMethod(Group3.to_edge,DOWN))
 
         n = 1
 
-        while n < 10:
-            valor_sig = TexMobject(r"p=" + str(n))
+        while n<10:
+            valor_sig = TexMobject(r"p="+str(n))
             valor_sig.to_edge(UP)
             self.add(valor_sig)
             D = []
-            j = 0
-            dj = 1 / 16
-            while j < 1:
-                dot1 = Dot(radius=0.05, color=PINK)
-                dot1_2 = Dot(radius=0.05, color=PINK)
-                dot1.move_to(np.array([j, (1 - j * n) * (1 / n), 0]))
-                dot1_2.move_to(np.array([(1 - j * n) * (1 / n), j, 0]))
-                self.add(dot1, dot1_2)
-                self.wait(0.05)
+            j=0
+            dj=1/16
+            while j<1:
+                dot1 = Dot(radius=0.05,color=PINK)
+                dot1_2 = Dot(radius=0.05,color=PINK)
+                dot1.move_to(np.array([j,(1-j**n)**(1/n),0]))
+                dot1_2.move_to(np.array([(1-j**n)**(1/n),j,0]))
+                #self.add(dot1,dot1_2)
+                #self.wait(0.05)
                 D.append(dot1)
                 D.append(dot1_2)
-                j = j + dj
-            j = 1
-            while j > 0:
-                dot2 = Dot(radius=0.05, color=PINK)
-                dot2_2 = Dot(radius=0.05, color=PINK)
-                dot2.move_to(np.array([j, -(1 - j * n) * (1 / n), 0]))
-                dot2_2.move_to(np.array([-(1 - j * n) * (1 / n), j, 0]))
-                self.add(dot2, dot2_2)
-                self.wait(0.05)
+                j=j+dj
+            j=1
+            while j>0:
+                dot2 = Dot(radius=0.05,color=PINK)
+                dot2_2 = Dot(radius=0.05,color=PINK)
+                dot2.move_to(np.array([j,-(1-j**n)**(1/n),0]))
+                dot2_2.move_to(np.array([-(1-j**n)**(1/n),j,0]))
+                #self.add(dot2,dot2_2)
+                #self.wait(0.05)
                 D.append(dot2)
                 D.append(dot2_2)
-                j = j - dj
-            j = 0
-            while j > -1:
-                dot3 = Dot(radius=0.05, color=PINK)
-                dot3_2 = Dot(radius=0.05, color=PINK)
-                dot3.move_to(np.array([j, -(1 - (-j) * n) * (1 / n), 0]))
-                dot3_2.move_to(np.array([-(1 - (-j) * n) * (1 / n), j, 0]))
-                self.add(dot3, dot3_2)
-                self.wait(0.05)
+                j=j-dj
+            j=0
+            while j>-1:
+                dot3 = Dot(radius=0.05,color=PINK)
+                dot3_2 = Dot(radius=0.05,color=PINK)
+                dot3.move_to(np.array([j,-(1-(-j)**n)**(1/n),0]))
+                dot3_2.move_to(np.array([-(1-(-j)**n)**(1/n),j,0]))
+                #self.add(dot3,dot3_2)
+                #self.wait(0.05)
                 D.append(dot3)
                 D.append(dot3_2)
-                j = j - dj
-            j = -1
-            while j < 0:
-                dot4 = Dot(radius=0.05, color=PINK)
-                dot4_2 = Dot(radius=0.05, color=PINK)
-                dot4.move_to(np.array([j, (1 - (-j) * n) * (1 / n), 0]))
-                dot4_2.move_to(np.array([(1 - (-j) * n) * (1 / n), j, 0]))
-                self.add(dot4, dot4_2)
-                self.wait(0.05)
+                j=j-dj
+            j=-1
+            while j<0:
+                dot4 = Dot(radius=0.05,color=PINK)
+                dot4_2 = Dot(radius=0.05,color=PINK)
+                dot4.move_to(np.array([j,(1-(-j)**n)**(1/n),0]))
+                dot4_2.move_to(np.array([(1-(-j)**n)**(1/n),j,0]))
+                #self.add(dot4,dot4_2)
+                #self.wait(0.05)
                 D.append(dot4)
                 D.append(dot4_2)
-                j = j + dj
+                j=j+dj
+            puntos = VGroup(*D)
+            self.add(puntos)
             self.wait(0.5)
             for i in D:
                 self.remove(i)
             self.remove(valor_sig)
-            n = n + 0.20
-        self.remove(plano, Group13, fig3)
-
+            n=round(n + 0.2, 1)
+        self.remove(plano,Group3,fig3)
+        
         conclus1 = TextMobject("Vemos que tiende al ``c\\'{i}rculo'' que resulta de usar")
-        conclus2 = TextMobject("la norma infinito, de ah\\'{i} su nombre.").next_to(conclus1, DOWN)
-        conclus = VGroup(conclus1, conclus2)
-        ejer = TextMobject("Puedes cambiar el c\\'{o}digo para verlo con m\\'{a}s valores de $p$")
+        conclus2 = TextMobject("la norma infinito, de ah\\'{i} su nombre.").next_to(conclus1,DOWN)
+        conclus = VGroup(conclus1,conclus2)
+        ejer = TextMobject("Puedes cambiar el código para verlo con más valores de $p$")
 
         self.play(Write(ejer))
         self.wait(2)
@@ -1355,10 +1344,9 @@ dxy = round(np.linalg.norm(posx - posy), 3)
 dxz = round(np.linalg.norm(posx - posz), 3)
 dzy = round(np.linalg.norm(posz - posy), 3)
 
-
 class Metrica(Scene):
     def construct(self):
-        dist = TextMobject("La m\\'{e}trica: un concepto de distancia").scale(1.2)
+        dist = TextMobject("La m\\'{e}trica es un concepto relacionado con la distancia").scale(1)
         aux1 = TexMobject(r"\text{Auxiliados del concepto de norma, definimos la distancia}").to_edge(UP).shift(DOWN)
         aux2 = TexMobject(r"\text{entre dos vectores}\ \vec{x},\ \vec{y}\ \text{como}:").next_to(aux1, DOWN)
         aux = VGroup(aux1, aux2)
@@ -1475,9 +1463,12 @@ class Metrica(Scene):
         ldxy = TexMobject(r"d(\vec{x},\vec{y})").next_to(bracesum.get_center(), DOWN)
         braces = VGroup(brace1, brace2, bracesum)
         dists = VGroup(ldxz, ldzy, ldxy)
-        laigualdad = TextMobject("(La igualdad se da si los tres puntos son colineales)").shift(DOWN).scale(0.8)
+        laigualdad = TextMobject("(La igualdad se da si y s\\'{o}lo si los tres puntos son colineales)").shift(DOWN).scale(0.8)
+        i_1 = TextMobject("Este concepto te\\'{o}rico nos permite")
+        i_2 = TextMobject("definir m\\'{e}tricas en espacios m\\'{a}s abstractos").next_to(i_1, DOWN)
         revisa = TextMobject("Edita el c\\'{o}digo para visualizar con m\\'{a}s vectores")
 
+        Group= VGroup(i_1, i_2)
 
         self.play(Write(TRI), runtime = 1.2)
         self.play(FadeOut(TRI))
@@ -1510,5 +1501,7 @@ class Metrica(Scene):
         self.wait(4)
         self.play(FadeOut(laigualdad), FadeOut(distprop3))
         self.wait()
-        self.play(Write(revisa))
+        self.play(Write(Group))
+        self.wait(2)
+        self.play(ReplacementTransform(Group, revisa))
         self.wait()
