@@ -1,6 +1,8 @@
 # CalcManim
 Conceptos de cálculo diferencial multivariable animados en [manim](https://github.com/3b1b/manim)
 
+Parte del proyecto educativo [Animathica](https://github.com/animathica)
+
 ## Introducción al cálculo multivariable:
   - Motivación, ¿de donde sale la necesidad de utilizar funciones de múltiples varialbes?
 
